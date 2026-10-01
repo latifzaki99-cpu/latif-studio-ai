@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LATIF STUDIO AI</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+:root{
+  --bg:#0b0b0d;--panel:#141418;--panel2:#1b1b20;--line:#2a2a31;
+  --text:#f6f6f7;--muted:#a8a8b3;--gold:#f1b84b;--gold2:#ffd77a;
+  --danger:#ff6b6b;--ok:#74d99f;--shadow:0 18px 50px rgba(0,0,0,.35)
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 10% 0%,#222016 0,#0b0b0d 34%),var(--bg);color:var(--text);font-family:Arial,"Segoe UI",sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{background:rgba(12,12,15,.92);border-left:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.logo{width:43px;height:43px;border-radius:13px;background:linear-gradient(135deg,var(--gold),#8a5a00);display:grid;place-items:center;color:#16120a;font-weight:900;box-shadow:0 8px 22px rgba(241,184,75,.2)}
+.brand b{display:block;font-size:17px}.brand small{color:var(--muted)}
+.nav{display:grid;gap:8px}
+.nav button{border:1px solid transparent;background:transparent;color:var(--muted);padding:12px 14px;border-radius:12px;text-align:right;cursor:pointer}
+.nav button:hover,.nav button.active{background:var(--panel2);color:var(--text);border-color:#32323a}
+.side-note{position:absolute;bottom:18px;right:16px;left:16px;padding:12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.65;background:#101014}
+main{padding:28px;max-width:1350px;width:100%;margin:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:24px}
+.title h1{margin:0;font-size:clamp(25px,4vw,42px);letter-spacing:.2px}
+.title p{margin:8px 0 0;color:var(--muted)}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer}
+.btn:hover{border-color:#484851}.btn.primary{background:linear-gradient(135deg,var(--gold),#c6881a);color:#15110a;font-weight:800;border:0}
+.btn.danger{color:#ffb0b0}.btn:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.7fr);gap:18px}
+.card{background:rgba(20,20,24,.88);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.composer{padding:18px}
+.modes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.mode{border:1px solid var(--line);background:#111115;color:var(--muted);border-radius:999px;padding:8px 12px;cursor:pointer}
+.mode.active{color:#16110a;background:var(--gold);border-color:var(--gold)}
+textarea{width:100%;min-height:145px;resize:vertical;background:#0d0d11;border:1px solid #303038;color:var(--text);border-radius:15px;padding:15px;outline:none;line-height:1.7}
+textarea:focus{border-color:#745b2a;box-shadow:0 0 0 3px rgba(241,184,75,.08)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.row .grow{flex:1}
+select,input[type=text]{background:#0d0d11;border:1px solid #303038;color:var(--text);border-radius:11px;padding:10px 12px}
+.tips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tip{font-size:12px;background:#18181d;border:1px solid var(--line);color:#c7c7ce;padding:8px 10px;border-radius:999px;cursor:pointer}
+.status{margin-top:12px;padding:11px 13px;border-radius:12px;background:#101014;border:1px solid var(--line);color:var(--muted);display:none}
+.status.show{display:block}.status.ok{color:var(--ok)}.status.err{color:#ffaaaa}
+.output{margin-top:18px;overflow:hidden}
+.output-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.output-body{padding:16px;min-height:260px}
+.empty{display:grid;place-items:center;min-height:260px;text-align:center;color:var(--muted)}
+.preview{width:100%;min-height:560px;border:1px solid var(--line);border-radius:14px;background:white}
+.code{white-space:pre-wrap;word-break:break-word;background:#08080b;border:1px solid var(--line);padding:14px;border-radius:13px;direction:ltr;text-align:left;max-height:560px;overflow:auto}
+.textout{white-space:pre-wrap;line-height:1.8;background:#0e0e12;padding:15px;border-radius:13px;border:1px solid var(--line)}
+.media{max-width:100%;border-radius:14px;display:block;margin:auto;max-height:650px}
+.history{padding:16px}
+.history h3{margin:0 0 12px}.history-list{display:grid;gap:9px;max-height:650px;overflow:auto}
+.hist{border:1px solid var(--line);background:#101014;border-radius:12px;padding:11px;cursor:pointer}
+.hist:hover{border-color:#484851}.hist b{display:block;font-size:13px}.hist small{color:var(--muted)}
+.notice{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.7}
+.switch{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.mobile-nav{display:none}
+@media(max-width:900px){
+  .shell{display:block}.sidebar{display:none}main{padding:16px 14px 82px}.grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.actions{width:100%}
+  .mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;right:0;left:0;background:rgba(11,11,14,.96);border-top:1px solid var(--line);z-index:20}
+  .mobile-nav button{border:0;background:transparent;color:var(--muted);padding:11px 4px;font-size:11px}.mobile-nav button.active{color:var(--gold)}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">L</div><div><b>LATIF STUDIO AI</b><small>اصنع شغلك من مكان واحد</small></div></div>
+    <div class="nav" id="sideNav"></div>
+    <div class="side-note">الموقع يستخدم Puter.js. مفيش API key عندك، لكن الاستخدام المجاني له حدود، والاستخدام الثقيل للصور والفيديو ممكن يحتاج credits من حساب المستخدم.</div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="title"><h1>اعمل أي حاجة بالـAI</h1><p>مواقع، Web Apps، صور، فيديوهات، إعلانات وكتابة للعملاء.</p></div>
+      <div class="actions">
+        <select id="lang">
+          <option value="ar">العربية</option>
+          <option value="nl">Nederlands</option>
+          <option value="en">English</option>
+        </select>
+        <button class="btn" id="signin">تسجيل دخول Puter</button>
+        <button class="btn" id="costBtn">التكلفة</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section>
+        <div class="card composer">
+          <div class="modes" id="modes"></div>
+          <textarea id="prompt" placeholder="اكتب عايز تعمل إيه... مثال: اعمل موقع مطعم أسود وذهبي فيه منيو وزر طلب واتساب"></textarea>
+          <div class="row">
+            <label class="switch" id="testWrap"><input type="checkbox" id="testMode" checked/> وضع تجربة للفيديو</label>
+            <span class="grow"></span>
+            <button class="btn" id="clearBtn">مسح</button>
+            <button class="btn primary" id="generate">✨ إنشاء</button>
+          </div>
+          <div class="tips" id="tips"></div>
+          <div class="status" id="status"></div>
+        </div>
+
+        <div class="card output">
+          <div class="output-head">
+            <b id="outputTitle">النتيجة</b>
+            <div class="row" style="margin:0" id="outputActions"></div>
+          </div>
+          <div class="output-body" id="output">
+            <div class="empty">اكتب طلبك واضغط «إنشاء».</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card history">
+        <h3>المشاريع الأخيرة</h3>
+        <div class="history-list" id="history"></div>
+        <div class="notice">نصيحة: ابدأ بمواقع بسيطة للعملاء الصغيرين، وبعد ما تخلص اعمل معاينة وورّي العميل النتيجة قبل أي اتفاق.</div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<nav class="mobile-nav" id="mobileNav"></nav>
+
+<dialog id="costDialog" style="max-width:520px;border:1px solid #33333b;border-radius:18px;background:#141418;color:#fff;padding:0">
+  <div style="padding:20px">
+    <h3 style="margin-top:0">التكلفة</h3>
+    <p style="line-height:1.8;color:#c7c7ce">LATIF STUDIO AI لا يحتاج منك API key مدفوع. خدمات الذكاء الاصطناعي هنا تمر عبر Puter.js. ممكن يكون عند المستخدم رصيد/سماح مجاني، لكن الاستخدام الكثيف خصوصًا الصور والفيديو قد يحتاج credits في حساب Puter نفسه.</p>
+    <button class="btn primary" onclick="document.getElementById('costDialog').close()">تمام</button>
+  </div>
+</dialog>
+
+<script>
+const modes = [
+  {id:'any', ar:'أي حاجة', nl:'Alles', en:'Anything', icon:'✨'},
+  {id:'website', ar:'موقع', nl:'Website', en:'Website', icon:'🌐'},
+  {id:'app', ar:'تطبيق', nl:'Web-app', en:'Web app', icon:'📱'},
+  {id:'image', ar:'صورة', nl:'Afbeelding', en:'Image', icon:'🖼️'},
+  {id:'video', ar:'فيديو', nl:'Video', en:'Video', icon:'🎬'},
+  {id:'ad', ar:'إعلان/بوستر', nl:'Advertentie', en:'Ad/Poster', icon:'📣'},
+  {id:'text', ar:'كتابة', nl:'Tekst', en:'Writing', icon:'✍️'}
+];
+const translations = {
+  ar:{placeholder:'اكتب عايز تعمل إيه... مثال: اعمل موقع مطعم أسود وذهبي فيه منيو وزر طلب واتساب',create:'✨ إنشاء',clear:'مسح',result:'النتيجة',signin:'تسجيل دخول Puter',signed:'تم تسجيل الدخول',cost:'التكلفة',empty:'اكتب طلبك واضغط «إنشاء».',working:'جاري التنفيذ...',copy:'نسخ',download:'تحميل',preview:'معاينة',code:'الكود',publish:'نشر الموقع',open:'فتح',regen:'إعادة',test:'وضع تجربة للفيديو'},
+  nl:{placeholder:'Schrijf wat je wilt maken... Bijvoorbeeld: maak een zwarte/gouden restaurantsite met menu en WhatsApp-knop',create:'✨ Maken',clear:'Wissen',result:'Resultaat',signin:'Inloggen bij Puter',signed:'Ingelogd',cost:'Kosten',empty:'Schrijf je opdracht en klik op Maken.',working:'Bezig...',copy:'Kopiëren',download:'Download',preview:'Preview',code:'Code',publish:'Website publiceren',open:'Openen',regen:'Opnieuw',test:'Videotestmodus'},
+  en:{placeholder:'Describe what you want to create... Example: make a black and gold restaurant site with a menu and WhatsApp button',create:'✨ Create',clear:'Clear',result:'Result',signin:'Sign in to Puter',signed:'Signed in',cost:'Cost',empty:'Write your request and press Create.',working:'Working...',copy:'Copy',download:'Download',preview:'Preview',code:'Code',publish:'Publish website',open:'Open',regen:'Regenerate',test:'Video test mode'}
+};
+const promptTips = {
+  any:['اعمل موقع لمطعم','اعمل لوجو احترافي','اعمل فيديو إعلان قصير','اكتب إعلان لمحل'],
+  website:['موقع مطعم بالمنيو والطلبات','موقع حلاق للحجز','Landing page لجيم','Portfolio شخصي'],
+  app:['POS بسيط لمطعم','برنامج فواتير بسيط','To-do للطلاب','نظام حجز مواعيد'],
+  image:['لوجو فاخر أسود وذهبي','بوستر لمطعم برجر','تصميم فيلا مودرن','صورة منتج احترافية'],
+  video:['إعلان برجر سينمائي','فيديو فيلا فاخرة','Product teaser','Short للسوشيال ميديا'],
+  ad:['بوستر عرض مطعم','إعلان إنستجرام لحلاق','بوستر افتتاح محل','منيو بصري'],
+  text:['كابشن إنستجرام','وصف شركة','عرض سعر بسيط','نص إعلان قصير']
+};
+let activeMode='any', lastResult=null, viewMode='preview';
+const $=id=>document.getElementById(id);
+
+function t(k){return translations[$('lang').value][k]||k}
+function setStatus(msg,type=''){const el=$('status');el.textContent=msg;el.className='status show '+type}
+function clearStatus(){$('status').className='status';$('status').textContent=''}
+function escapeHtml(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function stripCodeFence(s){
+  s=(s||'').trim();
+  const m=s.match(/```(?:html)?\s*([\s\S]*?)```/i);
+  if(m) return m[1].trim();
+  return s.replace(/^```[a-z]*\s*/i,'').replace(/```$/,'').trim();
+}
+function renderModes(){
+  const lang=$('lang').value;
+  const html=modes.map(m=>`<button class="mode ${m.id===activeMode?'active':''}" data-mode="${m.id}">${m.icon} ${m[lang]}</button>`).join('');
+  $('modes').innerHTML=html;
+  $('sideNav').innerHTML=modes.slice(0,6).map(m=>`<button class="${m.id===activeMode?'active':''}" data-mode="${m.id}">${m.icon} ${m[lang]}</button>`).join('');
+  $('mobileNav').innerHTML=modes.slice(0,5).map(m=>`<button class="${m.id===activeMode?'active':''}" data-mode="${m.id}">${m.icon}<br>${m[lang]}</button>`).join('');
+  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{activeMode=b.dataset.mode;renderModes();renderTips();updateVideoToggle()});
+}
+function renderTips(){
+  $('tips').innerHTML=(promptTips[activeMode]||[]).map(x=>`<button class="tip">${x}</button>`).join('');
+  document.querySelectorAll('.tip').forEach(b=>b.onclick=()=>{$('prompt').value=b.textContent;$('prompt').focus()});
+}
+function updateVideoToggle(){$('testWrap').style.display=activeMode==='video'?'flex':'none'}
+function syncText(){
+  $('prompt').placeholder=t('placeholder');$('generate').textContent=t('create');$('clearBtn').textContent=t('clear');
+  $('outputTitle').textContent=t('result');$('signin').textContent=puter?.auth?.isSignedIn?.()?t('signed'):t('signin');
+  $('costBtn').textContent=t('cost');$('testWrap').childNodes[$('testWrap').childNodes.length-1].textContent=' '+t('test');
+  renderModes();renderTips();
+}
+function inferMode(p){
+  const x=p.toLowerCase();
+  if(/فيديو|video|clip|reel|short/.test(x)) return 'video';
+  if(/صورة|لوجو|logo|image|foto|poster|بوستر|تصميم/.test(x)) return /اعلان|إعلان|poster|بوستر/.test(x)?'ad':'image';
+  if(/موقع|website|web site|landing/.test(x)) return 'website';
+  if(/تطبيق|app|برنامج|systeem|tool/.test(x)) return 'app';
+  return 'text';
+}
+async function ensureAuth(){
+  if(!window.puter) throw new Error('Puter.js لم يتم تحميله. تأكد إن الإنترنت شغال.');
+  if(!puter.auth.isSignedIn()) await puter.auth.signIn({attempt_temp_user_creation:true});
+  $('signin').textContent=t('signed');
+}
+function saveHistory(item){
+  const h=JSON.parse(localStorage.getItem('latifStudioHistory')||'[]');
+  h.unshift(item);localStorage.setItem('latifStudioHistory',JSON.stringify(h.slice(0,20)));renderHistory();
+}
+function renderHistory(){
+  const h=JSON.parse(localStorage.getItem('latifStudioHistory')||'[]');
+  $('history').innerHTML=h.length?h.map((x,i)=>`<div class="hist" data-i="${i}"><b>${escapeHtml(x.type.toUpperCase())} — ${escapeHtml((x.prompt||'').slice(0,55))}</b><small>${new Date(x.date).toLocaleString()}</small></div>`).join(''):`<div class="empty" style="min-height:160px">مفيش مشاريع لسه.</div>`;
+  document.querySelectorAll('.hist').forEach(el=>el.onclick=()=>{const x=h[+el.dataset.i];$('prompt').value=x.prompt;activeMode=x.type;renderModes();renderTips()});
+}
+function setActions(buttons){$('outputActions').innerHTML=buttons.map(b=>`<button class="btn" data-act="${b.id}">${b.label}</button>`).join('');buttons.forEach(b=>{const el=document.querySelector(`[data-act="${b.id}"]`);if(el)el.onclick=b.fn})}
+function downloadText(name,content,type='text/html'){
+  const blob=new Blob([content],{type});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)
+}
+async function publishWebsite(code){
+  try{
+    await ensureAuth();setStatus('جاري نشر الموقع...');
+    const dir='latif-site-'+Date.now();await puter.fs.mkdir(dir);await puter.fs.write(`${dir}/index.html`,code);
+    const sub='latif-'+Math.random().toString(36).slice(2,9);const site=await puter.hosting.create(sub,dir);
+    const url=`https://${site.subdomain}.puter.site`;
+    setStatus('تم النشر: '+url,'ok');window.open(url,'_blank');
+  }catch(e){setStatus('فشل النشر: '+(e?.message||e?.msg||e),'err')}
+}
+function renderCodeResult(code,mode){
+  lastResult={kind:'code',content:code,mode};viewMode='preview';
+  const draw=()=>{
+    if(viewMode==='preview'){
+      $('output').innerHTML=`<iframe class="preview" sandbox="allow-scripts allow-forms allow-modals allow-popups" id="frame"></iframe>`;
+      $('frame').srcdoc=code;
+    }else $('output').innerHTML=`<pre class="code">${escapeHtml(code)}</pre>`;
+    setActions([
+      {id:'toggle',label:viewMode==='preview'?t('code'):t('preview'),fn:()=>{viewMode=viewMode==='preview'?'code':'preview';draw()}},
+      {id:'copy',label:t('copy'),fn:()=>navigator.clipboard.writeText(code)},
+      {id:'download',label:t('download'),fn:()=>downloadText('client-project.html',code)},
+      {id:'publish',label:t('publish'),fn:()=>publishWebsite(code)}
+    ]);
+  };draw();
+}
+function renderTextResult(text){
+  lastResult={kind:'text',content:text,mode:activeMode};$('output').innerHTML=`<div class="textout">${escapeHtml(text)}</div>`;
+  setActions([{id:'copy',label:t('copy'),fn:()=>navigator.clipboard.writeText(text)},{id:'download',label:t('download'),fn:()=>downloadText('result.txt',text,'text/plain')}])
+}
+function renderImage(img){
+  lastResult={kind:'image',src:img.src,mode:activeMode};img.className='media';$('output').innerHTML='';$('output').appendChild(img);
+  setActions([{id:'open',label:t('open'),fn:()=>window.open(img.src,'_blank')},{id:'download',label:t('download'),fn:()=>{const a=document.createElement('a');a.href=img.src;a.download='latif-ai-image.png';a.target='_blank';a.click()}}])
+}
+function renderVideo(vid){
+  lastResult={kind:'video',src:vid.src,mode:activeMode};vid.className='media';vid.controls=true;$('output').innerHTML='';$('output').appendChild(vid);
+  setActions([{id:'open',label:t('open'),fn:()=>window.open(vid.src,'_blank')},{id:'download',label:t('download'),fn:()=>{const a=document.createElement('a');a.href=vid.src;a.download='latif-ai-video.mp4';a.target='_blank';a.click()}}])
+}
+async function doGenerate(){
+  const p=$('prompt').value.trim(); if(!p){setStatus('اكتب طلبك الأول.','err');return}
+  let mode=activeMode==='any'?inferMode(p):activeMode;
+  activeMode=mode;renderModes();renderTips();updateVideoToggle();
+  $('generate').disabled=true;setStatus(t('working'));$('output').innerHTML='<div class="empty">⏳ '+t('working')+'</div>';setActions([]);
+  try{
+    await ensureAuth();
+    if(mode==='image'||mode==='ad'){
+      let ip=p;if(mode==='ad') ip='Create a professional advertising/poster visual. '+p;
+      const img=await puter.ai.txt2img(ip);renderImage(img);
+    }else if(mode==='video'){
+      const vid=await puter.ai.txt2vid(p,$('testMode').checked===true);renderVideo(vid);
+    }else{
+      let sys='';
+      if(mode==='website') sys=`Create a complete, polished, responsive client-ready website as ONE self-contained HTML file with inline CSS and JavaScript. Return ONLY the HTML, no markdown, no explanation. It must work when opened directly in a browser. User request: `;
+      else if(mode==='app') sys=`Create a complete small browser web-app/MVP as ONE self-contained HTML file with inline CSS and JavaScript. Return ONLY the HTML, no markdown, no explanation. It must be functional when opened directly in a browser and use localStorage when persistence is useful. User request: `;
+      else sys=`Produce the finished deliverable requested by the user. Write in the same language as the user's prompt. Be practical and ready to copy/use. User request: `;
+      const resp=await puter.ai.chat(sys+p,{normalize:true});
+      const text=resp?.message?.content ?? String(resp);
+      if(mode==='website'||mode==='app') renderCodeResult(stripCodeFence(text),mode); else renderTextResult(text);
+    }
+    clearStatus();saveHistory({type:mode,prompt:p,date:new Date().toISOString()});
+  }catch(e){
+    console.error(e);const msg=e?.message||e?.msg||e?.error?.message||String(e);
+    setStatus('حصل خطأ: '+msg,'err');$('output').innerHTML='<div class="empty">مقدرتش أطلع النتيجة. جرّب تاني أو غيّر الطلب.</div>';
+  }finally{$('generate').disabled=false}
+}
+$('generate').onclick=doGenerate;
+$('clearBtn').onclick=()=>{$('prompt').value='';$('output').innerHTML=`<div class="empty">${t('empty')}</div>`;setActions([]);clearStatus()};
+$('signin').onclick=async()=>{try{await ensureAuth();setStatus('تم تسجيل الدخول','ok')}catch(e){setStatus(e?.msg||e?.message||String(e),'err')}};
+$('costBtn').onclick=()=>$('costDialog').showModal();
+$('lang').onchange=()=>{document.documentElement.lang=$('lang').value;document.documentElement.dir=$('lang').value==='ar'?'rtl':'ltr';syncText()};
+$('prompt').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')doGenerate()});
+syncText();renderHistory();updateVideoToggle();
+</script>
+</body>
+</html>
